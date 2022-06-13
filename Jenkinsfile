@@ -8,8 +8,8 @@ pipeline {
         }
     }
 
-    environment {
-    }
+    // environment {
+    // }
 
     stages {
 
@@ -21,10 +21,10 @@ pipeline {
 
     }
 
-    post {
-        always {
-        }
-    }
+    // post {
+    //     always {
+    //     }
+    // }
 
 }
 
