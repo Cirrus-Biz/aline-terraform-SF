@@ -52,5 +52,17 @@ variable "private_subnet_numbers" {
   #   "us-east-1f" = 12
   # }
 }
+
+# todo change discription
+variable "subnet_bits_for_split_public" {
+    type = string
+    description = "number of bits to move over for cicr block"
+}
  
  
+# todo change discription
+variable "subnet_bits_for_split_private" {
+    type = string
+    description = "number of bits to move over for cicr block"
+}
+

@@ -11,7 +11,7 @@ resource "aws_vpc" "vpc" {
 }
 
 
-# create internet gateway
+# create internet gateway for vpc
 resource "aws_internet_gateway" "internet_gateway" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
@@ -25,12 +25,12 @@ resource "aws_internet_gateway" "internet_gateway" {
 }
 
 
-# create 1 public subnet for each az specified in input.tfvars
+# create 1 public subnet for each AZ specified in input.tfvars
 resource "aws_subnet" "public" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
   for_each = var.public_subnet_numbers
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)  # 2,048 IP addresses each off /17
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_public, each.value)  # 4 would be 2,048 IP addresses each off /17
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_public_subnet"
@@ -47,7 +47,7 @@ resource "aws_subnet" "private" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
   for_each = var.private_subnet_numbers
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)  # 2,048 IP addresses each off /17
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_private, each.value)  # 4 would be 2,048 IP addresses each off /17
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_private_subnet"
