@@ -1,3 +1,4 @@
+# project variables
 infra_region = "us-east-1"
 infra_env = "dev"
 project_name = "aline-SF"
@@ -23,5 +24,87 @@ private_subnet_numbers = {
                         "us-east-1e" = 11
                         "us-east-1f" = 12
                         }
+
+# subnet splits form vpc 4 with /16 would give /20 subnet
 subnet_bits_for_split_public = "4"
 subnet_bits_for_split_private = "4"
+
+# public nacl egress
+nacl_public_egress = [
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    },
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    }
+]
+
+# public nacl ingress
+nacl_public_ingress = [
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    },
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    }
+]
+
+# public nacl egress 
+nacl_private_egress = [
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    },
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    }
+]
+
+# public nacl ingress 
+nacl_public_ingress = [
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    },
+    {
+        protocol = "tcp"
+        rule_no = 100
+        action = "allow"
+        cidr_block = "0.0.0.0/0"
+        from_port = 0
+        to_port = 65535
+    }
+]

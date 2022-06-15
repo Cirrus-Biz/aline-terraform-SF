@@ -8,4 +8,8 @@ module "vpc" {
     private_subnet_numbers = var.private_subnet_numbers
     subnet_bits_for_split_public = var.subnet_bits_for_split_public
     subnet_bits_for_split_private = var.subnet_bits_for_split_private 
+    nacl_public_egress = var.nacl_public_egress
+    nacl_public_ingress = var.nacl_public_ingress    
+    nacl_private_egress = var.nacl_private_egress
+    nacl_private_ingress = var.nacl_private_ingress
 }
