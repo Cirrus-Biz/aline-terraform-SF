@@ -16,7 +16,7 @@ variable "infra_env" {
 
 variable "project_name" {
   type        = string
-  description = "name of project for tagging | helps with tagging"
+  description = "name of project | helps with tagging"
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -25,7 +25,7 @@ variable "project_name" {
 # vpc cidr block
 variable "vpc_cidr_block" {
     type = string
-    description = "vpc cidr block | you should specify this"
+    description = "vpc cidr block | you should specify this in input.tfvars"
     default = "10.0.0.0/16" 
 }
 
@@ -46,7 +46,7 @@ variable "public_subnet_numbers" {
 }
  
 
-# list of AZ to split private subnets into
+# list of AZ to split private subnets into | should start after public number
 variable "private_subnet_numbers" {
   type = map(number)
   description = "map of region AZ to number that should be used for private subnets"
@@ -61,25 +61,23 @@ variable "private_subnet_numbers" {
   # }
 }
 
-# todo change discription
 # variable to set public subnet cidr block size
 # if vpc cidr block is /16 then 4 makes public subnets a /20
 variable "subnet_bits_for_split_public" {
     type = string
-    description = "number of bits to move over for cicr block"
+    description = "number to add onto vpc cidr for public subnet cidr size"
 }
  
  
-# todo change discription
 # variable to set private subnet cidr block size
 # if vpc cidr block is /16 then 4 makes private subnets a /20
 variable "subnet_bits_for_split_private" {
     type = string
-    description = "number of bits to move over for cicr block"
+    description = "number to add onto vpc cidr for public subnet cidr size"
 }
 
 
-# todo change discription
+# nacle public egress dynamic block
 variable "nacl_public_egress" {
     type = list(object({
         protocol = string
@@ -93,7 +91,7 @@ variable "nacl_public_egress" {
 }
 
 
-# todo change discription
+# nacle public ingress dynamic block
 variable "nacl_public_ingress" {
     type = list(object({
         protocol = string
@@ -107,7 +105,7 @@ variable "nacl_public_ingress" {
 }
 
 
-# todo change discription
+# nacle private egress dynamic block
 variable "nacl_private_egress" {
     type = list(object({
         protocol = string
@@ -121,7 +119,7 @@ variable "nacl_private_egress" {
 }
 
 
-# todo change discription
+# nacle private ingress dynamic block
 variable "nacl_private_ingress" {
     type = list(object({
         protocol = string
