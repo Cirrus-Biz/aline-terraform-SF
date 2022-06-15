@@ -38,14 +38,6 @@ nacl_public_egress = [
         cidr_block = "0.0.0.0/0"
         from_port = 0
         to_port = 65535
-    },
-    {
-        protocol = "tcp"
-        rule_no = 100
-        action = "allow"
-        cidr_block = "0.0.0.0/0"
-        from_port = 0
-        to_port = 65535
     }
 ]
 
@@ -61,7 +53,7 @@ nacl_public_ingress = [
     }
 ]
 
-# public nacl egress 
+# private nacl egress 
 nacl_private_egress = [
     {
         protocol = "tcp"
@@ -73,8 +65,8 @@ nacl_private_egress = [
     }
 ]
 
-# public nacl ingress 
-nacl_public_ingress = [
+# private nacl ingress 
+nacl_private_ingress = [
     {
         protocol = "tcp"
         rule_no = 100
