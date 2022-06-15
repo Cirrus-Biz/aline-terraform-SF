@@ -66,7 +66,7 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "nat_eip" {
   vpc = true
   lifecycle {
-    prevent_destroy = true
+    # prevent_destroy = true
   }
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_nat_eip"
@@ -95,7 +95,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
  
-
+# TODO Make Rout Dynamic Block
 # public route table (subnets with internet gateway)
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
@@ -117,6 +117,8 @@ resource "aws_route_table" "public" {
 # private route table (subnets with nat gateway)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
+  route {
+  }
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_private_route_table"
     Environment = var.infra_env
