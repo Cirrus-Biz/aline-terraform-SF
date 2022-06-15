@@ -4,7 +4,7 @@
 DATE=$(date)
 
 # set aws account to aline
-export AWS_PROFILE=aline
+# export AWS_PROFILE=aline
 
 # init to correct state file
 terraform init -backend-config=backend.hcl
