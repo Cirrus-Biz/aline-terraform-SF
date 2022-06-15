@@ -7,7 +7,7 @@ DATE=$(date)
 # export AWS_PROFILE=aline
 
 # init to correct state file
-terraform init-chdir=$(PWD) -backend-config=backend.hcl
+terraform init -backend-config=./backend.hcl
 
 # terraform plan that outputs plan to json file to be parsed
 terraform plan -json -var-file=input.tfvars > tfplan_output.json
