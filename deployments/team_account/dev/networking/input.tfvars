@@ -25,7 +25,7 @@ private_subnet_numbers = {
                         "us-east-1f" = 12
                         }
 
-# subnet splits form vpc 4 with /16 would give /20 subnet
+# subnet splits from vpc with /16 would give /20 subnets
 subnet_bits_for_split_public = "4"
 subnet_bits_for_split_private = "4"
 
@@ -58,14 +58,6 @@ nacl_public_ingress = [
         cidr_block = "0.0.0.0/0"
         from_port = 0
         to_port = 65535
-    },
-    {
-        protocol = "tcp"
-        rule_no = 100
-        action = "allow"
-        cidr_block = "0.0.0.0/0"
-        from_port = 0
-        to_port = 65535
     }
 ]
 
@@ -78,27 +70,11 @@ nacl_private_egress = [
         cidr_block = "0.0.0.0/0"
         from_port = 0
         to_port = 65535
-    },
-    {
-        protocol = "tcp"
-        rule_no = 100
-        action = "allow"
-        cidr_block = "0.0.0.0/0"
-        from_port = 0
-        to_port = 65535
     }
 ]
 
 # public nacl ingress 
 nacl_public_ingress = [
-    {
-        protocol = "tcp"
-        rule_no = 100
-        action = "allow"
-        cidr_block = "0.0.0.0/0"
-        from_port = 0
-        to_port = 65535
-    },
     {
         protocol = "tcp"
         rule_no = 100
