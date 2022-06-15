@@ -11,7 +11,7 @@ resource "aws_vpc" "vpc" {
 }
 
 
-# create internet gateway
+# create internet gateway for created vpc
 resource "aws_internet_gateway" "internet_gateway" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
@@ -25,12 +25,13 @@ resource "aws_internet_gateway" "internet_gateway" {
 }
 
 
-# create 1 public subnet for each az specified in input.tfvars
+# create 1 public subnet for each AZ specified in input.tfvars
 resource "aws_subnet" "public" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
   for_each = var.public_subnet_numbers
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)  # 2,048 IP addresses each off /17
+  # adds specifiec number of bits to vpc cider | 4 bits on /16 would split subnets to /20 cidr
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_public, each.value)  
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_public_subnet"
@@ -47,7 +48,8 @@ resource "aws_subnet" "private" {
   depends_on = [aws_vpc.vpc]
   vpc_id = aws_vpc.vpc.id
   for_each = var.private_subnet_numbers
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, 4, each.value)  # 2,048 IP addresses each off /17
+  # adds specifiec number of bits to vpc cider | 4 bits on /16 would split subnets to /20 cidr
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_private, each.value)  # 4 would be 2,048 IP addresses each off /17
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_private_subnet"
@@ -64,7 +66,7 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "nat_eip" {
   vpc = true
   lifecycle {
-    # prevent_destroy = true
+    prevent_destroy = true
   }
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_nat_eip"
@@ -77,13 +79,11 @@ resource "aws_eip" "nat_eip" {
 }
 
 
-# currently only creating one nat gateway, potential single point of failure
-# each nat roughly $32/mo production should have one nat gateway per az created, or even one per subnet.
-# note: cross-az bandwidth is an extra charge, so having a nat per az could be cheaper than a single nat gateway depending on your usage
+# create nat gateway
 resource "aws_nat_gateway" "nat_gateway" {
   depends_on = [aws_eip.nat_eip]
   allocation_id = aws_eip.nat_eip.id
-  # finds first public subnet / ngw needs to be on a public subnet with an igw
+  # finds first public subnet | ngw needs to be on a public subnet with an igw access
   subnet_id = aws_subnet.public[element(keys(aws_subnet.public), 0)].id  # gets first public subnet id
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_nat_gateway"
@@ -95,7 +95,7 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
  
-# TODO make routes input in input.tfvars
+
 # public route table (subnets with internet gateway)
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
@@ -114,13 +114,12 @@ resource "aws_route_table" "public" {
 }
 
  
-# TODO make routes input in input.tfvars
 # private route table (subnets with nat gateway)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
   route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id         = aws_nat_gateway.nat_gateway.id
+    cidr_block = var.vpc_cidr_block
+    nat_gateway_id = aws_nat_gateway.nat_gateway.id
   }
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_private_route_table"
@@ -150,28 +149,32 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private.id
 }
 
-# TODO make nacl rules input in input.tfvars
 # create public subnet nacl
 resource "aws_network_acl" "nacl_public" {
   vpc_id = aws_vpc.vpc.id
-  egress {
-    protocol = "tcp"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 65535
+  dynamic "egress" {
+    for_each = var.nacl_public_egress
+    content{
+        protocol = egress.value.protocol
+        rule_no = egress.value.rule_no
+        action = egress.value.action
+        cidr_block = egress.value.cidr_block
+        from_port = egress.value.from_port
+        to_port = egress.value.to_port
+    }
   }
 
-  ingress {
-    protocol = "tcp"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 65535
+  dynamic "ingress" {
+    for_each = var.nacl_public_egress
+    content{
+        protocol = ingress.value.protocol
+        rule_no = ingress.value.rule_no
+        action = ingress.value.action
+        cidr_block = ingress.value.cidr_block
+        from_port = ingress.value.from_port
+        to_port = ingress.value.to_port
+    }
   }
-
   tags = {
     Name = "${var.project_name}_${var.infra_region}_${var.infra_env}_nacl_public"
     Project = var.project_name
@@ -190,28 +193,33 @@ resource "aws_network_acl_association" "public" {
 }
 
 
-# TODO make nacl rules input in input.tfvars
 # create private subnet nacl
 resource "aws_network_acl" "nacl_private" {
   vpc_id = aws_vpc.vpc.id
-  egress {
-    protocol = "tcp"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 65535
+
+  dynamic "egress" {
+    for_each = var.nacl_private_egress
+    content{
+        protocol = egress.value.protocol
+        rule_no = egress.value.rule_no
+        action = egress.value.action
+        cidr_block = egress.value.cidr_block
+        from_port = egress.value.from_port
+        to_port = egress.value.to_port
+    }
   }
 
-  ingress {
-    protocol = "tcp"
-    rule_no = 100
-    action = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port = 0
-    to_port = 65535
+  dynamic "ingress" {
+    for_each = var.nacl_private_egress
+    content{
+        protocol = ingress.value.protocol
+        rule_no = ingress.value.rule_no
+        action = ingress.value.action
+        cidr_block = ingress.value.cidr_block
+        from_port = ingress.value.from_port
+        to_port = ingress.value.to_port
+    }
   }
-
   tags = {
     Name = "${var.project_name}_${var.infra_region}_${var.infra_env}_nacl_private"
     Project = var.project_name
