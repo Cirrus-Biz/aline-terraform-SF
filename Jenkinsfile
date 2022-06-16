@@ -37,7 +37,7 @@ pipeline {
         stage('Run Jenkins Script') {
             steps {
                 sh 'cd ~/jenkins/workspace/${JOB_NAME}/deployments/team_account/dev/networking'
-                sh './networking_changes_errors.sh'
+                sh 'sudo ./networking_changes_errors.sh'
             }
         }
         // TODO add check to abort
