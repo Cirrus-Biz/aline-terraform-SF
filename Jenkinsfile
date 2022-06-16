@@ -13,7 +13,7 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('SF_aws_secret_access_key') 
         AWS_REGION = credentials('SF_aws_region') 
         AWS_OUTPUT = credentials('SF_aws_output') 
-        AWS_ACCOUNT_ID = credentials('SF_aws_account_id') 
+        // AWS_ACCOUNT_ID = credentials('SF_aws_account_id') 
     }
 
     stages {
@@ -44,13 +44,13 @@ pipeline {
 
     }
 
-    // post {
-    //     always {
-    //         sh 'sudo docker logout'  // logs out of docker removing credentials
-    //         sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-    //     }
-    // }
+    post {
+        always {
+            // sh 'sudo docker logout'  // logs out of docker removing credentials
+            sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+        }
+    }
 
 }

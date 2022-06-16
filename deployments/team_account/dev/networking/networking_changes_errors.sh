@@ -36,16 +36,21 @@ if [ -z "$error_check" ]
             then
                 export ABORT="true"
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                echo "Abort Set To: $ABORT"
+
             else
                 export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
+                echo "Abort Set To: $ABORT"
                 # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
     else
         export ABORT="true"
+        echo "Abort Set To: $ABORT"
         echo "ERROR IN PLAN ABORTED | $DATE" >> ./change_log.txt
 fi
 
 # Jenkins will use export value to continue or abort pipeline
+echo "Git branch echo: $GIT_BRANCH"
