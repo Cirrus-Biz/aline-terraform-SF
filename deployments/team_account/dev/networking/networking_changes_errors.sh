@@ -11,9 +11,11 @@ export AWS_PROFILE=default
 
 # init to correct state file
 terraform init -backend-config=$FILE_PATH/backend.hcl
+echo "terraform init -backend-config=$FILE_PATH/backend.hcl"
 
 # terraform plan that outputs plan to json file to be parsed
 terraform plan -json -var-file=$FILE_PATH/input.tfvars > tfplan_output.json
+echo "terraform plan -json -var-file=$FILE_PATH/input.tfvars > tfplan_output.json"
 
 # greps plan output for errors
 error_check=$(grep -o 'error' ./tfplan_output.json)
