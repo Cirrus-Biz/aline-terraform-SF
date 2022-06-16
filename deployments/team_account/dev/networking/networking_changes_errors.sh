@@ -46,7 +46,7 @@ if [ -z "$error_check" ]
                 export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE"
-                # terraform apply -var-file=input.tfvars -auto-approve
+                terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
