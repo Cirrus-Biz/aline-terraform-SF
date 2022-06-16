@@ -5,7 +5,6 @@ DATE=$(date)
 
 # gets file path of this script
 FILE_PATH=$(dirname "$(realpath $0)")
-echo $FILE_PATH
 
 # set aws account to aline
 export AWS_PROFILE=default
@@ -58,3 +57,4 @@ fi
 echo "Git branch echo: $GIT_BRANCH"
 echo "Git lacal branch echo: $GIT_LOCAL_BRANCH"
 echo "Abort Set To: $ABORT"
+echo "File PATH: $FILE_PATH"
