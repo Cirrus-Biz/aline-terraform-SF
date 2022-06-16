@@ -15,9 +15,6 @@ pwd
 
 # init to correct state file
 sudo terraform init -backend-config=backend.hcl
-cd ~
-echo "new working dir:"
-pwd
 
 # terraform plan that outputs plan to json file to be parsed
 # terraform plan -json -var-file=./deployments/team_account/dev/networking/input.tfvars > tfplan_output.json
@@ -62,6 +59,7 @@ fi
 
 # Jenkins will use export value to continue or abort pipeline
 echo "Git branch echo: $GIT_BRANCH"
-echo "Git lacal branch echo: $GIT_LOCAL_BRANCH"
+echo "new working dir:"
+pwd
 echo "Abort Set To: $ABORT"
 echo "File PATH: $FILE_PATH"
