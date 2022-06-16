@@ -4,7 +4,7 @@
 DATE=$(date)
 
 # set aws account to aline
-# export AWS_PROFILE=aline
+export AWS_PROFILE=default
 
 # init to correct state file
 terraform init -backend-config=./backend.hcl
@@ -36,21 +36,21 @@ if [ -z "$error_check" ]
             then
                 export ABORT="true"
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
-                echo "Abort Set To: $ABORT"
-
+                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
             else
                 export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
-                echo "Abort Set To: $ABORT"
+                echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE"
                 # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
     else
         export ABORT="true"
-        echo "Abort Set To: $ABORT"
         echo "ERROR IN PLAN ABORTED | $DATE" >> ./change_log.txt
 fi
 
 # Jenkins will use export value to continue or abort pipeline
 echo "Git branch echo: $GIT_BRANCH"
+echo "Git lacal branch echo: $GIT_LOCAL_BRANCH"
+echo "Abort Set To: $ABORT"

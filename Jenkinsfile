@@ -13,7 +13,6 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('SF_aws_secret_access_key') 
         AWS_REGION = credentials('SF_aws_region') 
         AWS_OUTPUT = credentials('SF_aws_output') 
-        // AWS_ACCOUNT_ID = credentials('SF_aws_account_id') 
     }
 
     stages {
@@ -30,13 +29,11 @@ pipeline {
                 sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
                 sh 'aws configure set default.region ${AWS_REGION}'
                 sh 'aws configure set output ${AWS_OUTPUT}'
-                // sh 'aws ecr get-login-password --region ${AWS_REGION} | sudo docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com'
             }
         }
 
         stage('Run Jenkins Script') {
             steps {
-                sh 'pwd'
                 sh './deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
@@ -44,13 +41,13 @@ pipeline {
 
     }
 
-    // post {
-    //     always {
-    //         sh 'sudo docker logout'  // logs out of docker removing credentials
-    //         sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-    //     }
-    // }
+    post {
+        always {
+            sh 'sudo docker logout'  // logs out of docker removing credentials
+            sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+        }
+    }
 
 }
