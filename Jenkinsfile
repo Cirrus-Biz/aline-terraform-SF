@@ -30,14 +30,14 @@ pipeline {
                 sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
                 sh 'aws configure set default.region ${AWS_REGION}'
                 sh 'aws configure set output ${AWS_OUTPUT}'
-                sh 'aws ecr get-login-password --region ${AWS_REGION} | sudo docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com'
+                // sh 'aws ecr get-login-password --region ${AWS_REGION} | sudo docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com'
             }
         }
 
         stage('Run Jenkins Script') {
             steps {
                 sh 'cd ~/jenkins/workspace/${JOB_NAME}/deployments/team_account/dev/networking'
-                sh 'sudo ./networking_changes_errors.sh'
+                // sh 'sudo ./networking_changes_errors.sh'
             }
         }
         // TODO add check to abort
