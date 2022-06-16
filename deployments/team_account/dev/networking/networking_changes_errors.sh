@@ -3,6 +3,10 @@
 # date for logging
 DATE=$(date)
 
+# gets file path of this script
+FILE_PATH=$(dirname "$(realpath $0)")
+echo $FILE_PATH
+
 # set aws account to aline
 export AWS_PROFILE=default
 
