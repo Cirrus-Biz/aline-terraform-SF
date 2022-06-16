@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # date for logging
 DATE=$(date)
