@@ -14,7 +14,7 @@ echo "working dir:"
 pwd
 
 # init to correct state file
-sudo terraform init -backend-config=./deployments/team_account/dev/networking/backend.hcl
+sudo terraform init -backend-config=backend.hcl
 cd ~
 echo "new working dir:"
 pwd
