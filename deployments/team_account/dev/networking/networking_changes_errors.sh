@@ -9,12 +9,11 @@ FILE_PATH=$(dirname "$(realpath $0)")
 # set aws account to aline
 export AWS_PROFILE=default
 
-cd ./deployments/team_account/dev/networking
-echo "working dir:"
-pwd
+echo "who am i:"
+whoami
 
 # init to correct state file
-sudo terraform init -backend-config=backend.hcl
+sudo terraform init -backend-config=/home/ubuntu/jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/backend.hcl
 
 # terraform plan that outputs plan to json file to be parsed
 # terraform plan -json -var-file=./deployments/team_account/dev/networking/input.tfvars > tfplan_output.json
