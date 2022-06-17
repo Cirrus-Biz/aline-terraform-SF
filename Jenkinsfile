@@ -41,13 +41,6 @@ pipeline {
             }
         }
 
-        stage('Check Abort Env') {
-            steps {
-                sh 'echo "Abort Set To: $ABORT"'
-            }
-        }
-        // TODO add check to abort
-
     }
 
     post {
