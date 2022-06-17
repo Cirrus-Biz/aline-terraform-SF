@@ -36,6 +36,8 @@ pipeline {
         stage('Run Jenkins Script') {
             steps {
                 sh 'pwd'
+                sh 'cd deployments/team_account/dev/networking'
+                sh 'pwd'
                 sh './jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
