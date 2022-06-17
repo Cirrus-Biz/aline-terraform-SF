@@ -1,9 +1,9 @@
 #!/bin/bash
 
-git_branch=$(${GIT_BRANCH})
-echo $git_branch
+export GIT_BRANCH=$(${GIT_BRANCH})
+echo "Git Branch = $GIT_BRANCH"
 
-if [[ $git_branch == dev ]]
+if [[ $GIT_BRANCH == "origin/dev" ]]
     then
         cd  dev/networking
         ./networking_changes.sh
