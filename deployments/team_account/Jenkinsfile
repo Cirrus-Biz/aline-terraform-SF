@@ -30,9 +30,8 @@ pipeline {
 
         stage('Run Jenkins Script') {
             steps {
-                sh 'FILE_PATH=$(dirname "$(realpath $0)")'
-                dir("${WORKSPACE}/deployments/team_account/dev/networking") {
-                    sh './networking_changes.sh'
+                dir("${WORKSPACE}/deployments/team_account") {
+                    sh './jenkins_run.sh'
                 }
             }
         }

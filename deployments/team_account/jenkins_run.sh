@@ -1,4 +1,12 @@
 #!/bin/bash
 
-# if branch then to go directory and run that .sh
-export GIT_BRANCH=${GIT_BRANCH}
+git_branch=$(${GIT_BRANCH})
+echo $git_branch
+
+if [[ $git_branch == dev ]]
+    then
+        cd  dev/networking
+        ./networking_changes.sh
+    else
+        echo "NO BRANCH HERE"
+fi
