@@ -17,7 +17,7 @@ pipeline {
 
     stages {
 
-        stage('Export Branch') {
+        stage('Export Branch ENV') {
             steps {
                 sh 'export GIT_BRANCH=${GIT_BRANCH}'
             }
@@ -36,24 +36,27 @@ pipeline {
         stage('Run Jenkins Script') {
             steps {
                 dir("deployments/team_account/dev/networking/") {
-                    sh "pwd"
                     sh './networking_changes.sh'
                 }
-                // sh './jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
 
+        stage('Check Abort Env') {
+            steps {
+                sh 'echo Abort: $ABORT'
+            }
+        }
         // TODO add check to abort
 
     }
 
-    // post {
-    //     always {
-    //         sh 'sudo docker logout'  // logs out of docker removing credentials
-    //         sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-    //     }
-    // }
+    post {
+        always {
+            sh 'sudo docker logout'  // logs out of docker removing credentials
+            sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+        }
+    }
 
 }
