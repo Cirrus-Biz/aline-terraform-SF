@@ -35,7 +35,7 @@ pipeline {
 
         stage('Run Jenkins Script') {
             steps {
-                sh '~/jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
+                sh 'sudo . ~/jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
 
@@ -43,13 +43,13 @@ pipeline {
 
     }
 
-    post {
-        always {
-            sh 'sudo docker logout'  // logs out of docker removing credentials
-            sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-            sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-        }
-    }
+    // post {
+    //     always {
+    //         sh 'sudo docker logout'  // logs out of docker removing credentials
+    //         sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+    //         sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+    //     }
+    // }
 
 }
