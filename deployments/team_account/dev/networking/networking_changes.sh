@@ -38,7 +38,6 @@ if [ -z "$error_check" ]
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
                 exit 1
             else
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
