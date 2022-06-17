@@ -31,7 +31,7 @@ pipeline {
         stage('Run Jenkins Script') {
             steps {
                 # path from Jenkins working directory
-                dir("deployments/team_account/dev/networking/") {
+                dir("${WORKSPACE}/deployments/team_account/dev/networking/") {
                     sh './networking_changes.sh'
                 }
             }
