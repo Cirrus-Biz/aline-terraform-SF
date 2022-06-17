@@ -18,6 +18,12 @@ pipeline {
 
     stages {
 
+        stage('Export Branch For Script') {
+            steps {
+                sh 'export GIT_BRANCH=${GIT_BRANCH}'
+            }
+        }
+
         stage('AWS Credentials and Login') {
             steps {
                 sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID} --profile ${AWS_PROFILE}'

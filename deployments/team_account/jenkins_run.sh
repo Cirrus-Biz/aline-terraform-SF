@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export GIT_BRANCH=$(${GIT_BRANCH})
 echo "Git Branch = $GIT_BRANCH"
 
 if [[ $GIT_BRANCH == "origin/dev" ]]
