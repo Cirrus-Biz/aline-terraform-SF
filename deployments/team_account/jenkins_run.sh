@@ -2,7 +2,7 @@
 
 echo "Git Branch = $GIT_BRANCH"
 
-if [[ $GIT_BRANCH == "origin/dev" ]]
+if [[ $GIT_BRANCH == "origin/testing_jenkins" ]]
     then
         cd  dev/networking
         ./networking_changes.sh
