@@ -37,21 +37,17 @@ if [ -z "$error_check" ]
         # if all are 0 exports abort=true else apply and exports abort=false
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
-                export ABORT="true"
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
                 exit 1
             else
-                export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
                 terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
     else
-        export ABORT="true"
         echo "ERROR IN PLAN ABORTED | $DATE" >> ./change_log.txt
+        echo "ERROR IN PLAN ABORTED | $DATE"
         exit 1
 fi
-
-# Jenkins will use export value to continue or abort pipeline
-echo "Abort Set To: $ABORT"
