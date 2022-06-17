@@ -6,8 +6,7 @@ module "vpc" {
     vpc_cidr_block = var.vpc_cidr_block
     public_subnet_numbers = var.public_subnet_numbers
     private_subnet_numbers = var.private_subnet_numbers
-    subnet_bits_for_split_public = var.subnet_bits_for_split_public
-    subnet_bits_for_split_private = var.subnet_bits_for_split_private 
+    bits_for_subnet_cidr = var.bits_for_subnet_cidr
     nacl_public_egress = var.nacl_public_egress
     nacl_public_ingress = var.nacl_public_ingress    
     nacl_private_egress = var.nacl_private_egress

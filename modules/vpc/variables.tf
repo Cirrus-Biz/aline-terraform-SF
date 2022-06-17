@@ -61,19 +61,12 @@ variable "private_subnet_numbers" {
   # }
 }
 
-# variable to set public subnet cidr block size
-# if vpc cidr block is /16 then 4 makes public subnets a /20
-variable "subnet_bits_for_split_public" {
+
+# variable to set subnet cidr block size
+# if vpc cidr block is /16 then 4 makes subnets a /20 cidr
+variable "bits_for_subnet_cidr" {
     type = string
-    description = "number to add onto vpc cidr for public subnet cidr size"
-}
- 
- 
-# variable to set private subnet cidr block size
-# if vpc cidr block is /16 then 4 makes private subnets a /20
-variable "subnet_bits_for_split_private" {
-    type = string
-    description = "number to add onto vpc cidr for public subnet cidr size"
+    description = "number to add onto vpc cidr for subnet cidr size"
 }
 
 

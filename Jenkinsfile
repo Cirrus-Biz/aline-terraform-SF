@@ -37,6 +37,7 @@ pipeline {
                 sh '~/jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
+
         // TODO add check to abort
 
     }

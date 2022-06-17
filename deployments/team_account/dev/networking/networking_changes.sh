@@ -7,16 +7,13 @@ DATE=$(date)
 FILE_PATH=$(dirname "$(realpath $0)")
 
 # set aws account to aline
-export AWS_PROFILE=default
-
-echo "who am i:"
-whoami
+export AWS_PROFILE=aline-sf
 
 # init to correct state file
-sudo terraform init -backend-config=/home/ubuntu/jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/backend.hcl
+terraform init -backend-config=backend.hcl
 
 # terraform plan that outputs plan to json file to be parsed
-# terraform plan -json -var-file=./deployments/team_account/dev/networking/input.tfvars > tfplan_output.json
+terraform plan -json -var-file=input.tfvars > tfplan_output.json
 
 # greps plan output for errors
 error_check=$(grep -o 'error' ./tfplan_output.json)
@@ -42,11 +39,9 @@ if [ -z "$error_check" ]
             then
                 export ABORT="true"
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
             else
                 export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
-                echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE"
                 terraform apply -var-file=input.tfvars -auto-approve
         fi
 
@@ -57,8 +52,4 @@ if [ -z "$error_check" ]
 fi
 
 # Jenkins will use export value to continue or abort pipeline
-echo "Git branch echo: $GIT_BRANCH"
-echo "new working dir:"
-pwd
 echo "Abort Set To: $ABORT"
-echo "File PATH: $FILE_PATH"
