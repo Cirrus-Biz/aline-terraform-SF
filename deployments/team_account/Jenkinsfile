@@ -28,8 +28,8 @@ pipeline {
             }
         }
 
-        stage('Run Jenkins Script') {
-            steps {
+        # stage('Run Jenkins Script') {
+        #     steps {
                 # gets file path of this script
                 # sh 'FILE_PATH=$(dirname "$(realpath $0)")'
 
@@ -38,8 +38,8 @@ pipeline {
                 # dir("${WORKSPACE}/deployments/team_account/dev/networking") {
                 #     sh './networking_changes.sh'
                 # }
-            }
-        }
+        #     }
+        # }
 
     }
 
