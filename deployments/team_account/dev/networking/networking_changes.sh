@@ -39,6 +39,7 @@ if [ -z "$error_check" ]
             then
                 export ABORT="true"
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                exit 1
             else
                 export ABORT="false"
                 echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
@@ -49,6 +50,7 @@ if [ -z "$error_check" ]
     else
         export ABORT="true"
         echo "ERROR IN PLAN ABORTED | $DATE" >> ./change_log.txt
+        exit 1
 fi
 
 # Jenkins will use export value to continue or abort pipeline
