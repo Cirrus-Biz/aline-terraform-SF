@@ -25,10 +25,11 @@ pipeline {
 
         stage('AWS Credentials and Login') {
             steps {
-                sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}'
-                sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}'
-                sh 'aws configure set default.region ${AWS_REGION}'
-                sh 'aws configure set output ${AWS_OUTPUT}'
+                sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID} --profile aline-sf'
+                sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY} --profile aline-sf'
+                sh 'aws configure set default.region ${AWS_REGION} --profile aline-sf'
+                sh 'aws configure set output ${AWS_OUTPUT} --profile aline-sf'
+                sh 'export AWS_PROFILE=aline-sf'
             }
         }
 
