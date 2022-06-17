@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!/usr/bin/env bash
 
 pipeline {
 
@@ -35,7 +35,7 @@ pipeline {
 
         stage('Run Jenkins Script') {
             steps {
-                sh ' ./jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
+                sh './jenkins/workspace/SF-Terraform-Infrastructure/deployments/team_account/dev/networking/networking_changes_errors.sh'
             }
         }
 
