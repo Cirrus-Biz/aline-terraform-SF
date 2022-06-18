@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # date and time for logging
-DATE=$('date +%A-+%D-+%T')
+DATE=$(date +"%A-%D-%T-%Z")
 
 # gets file path of this script
 FILE_PATH=$(dirname "$(realpath $0)")
@@ -39,7 +39,7 @@ if [ -z "$error_check" ]
             else
                 echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
                 echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE"
-                terraform apply -var-file=input.tfvars -auto-approve
+                # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
