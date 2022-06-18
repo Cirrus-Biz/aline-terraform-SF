@@ -34,7 +34,6 @@ pipeline {
             }
         }
 
-        # check to see if jenkins will abort from second script
         stage('Run Jenkins Script') {
             steps {
                 dir("${WORKSPACE}/deployments/team_account") {
