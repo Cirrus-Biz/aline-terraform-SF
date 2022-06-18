@@ -45,7 +45,7 @@ pipeline {
 
         stage('Run Terraform Parent Bash Script') {
             steps {
-                dir('${WORKSPACE}/deployments/team_account') {
+                dir("${WORKSPACE}/deployments/team_account") {
                     sh './jenkins_run.sh'
                 }
             }
