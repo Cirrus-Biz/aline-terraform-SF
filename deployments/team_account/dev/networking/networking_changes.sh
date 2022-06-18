@@ -6,9 +6,6 @@ DATE=$('date +%A-+%D-+%T')
 # gets file path of this script
 FILE_PATH=$(dirname "$(realpath $0)")
 
-# set aws account to aline
-# export AWS_PROFILE=aline-sf
-
 # init to correct state file
 terraform init -backend-config=backend.hcl
 
@@ -42,7 +39,7 @@ if [ -z "$error_check" ]
             else
                 echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
                 echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE"
-                # terraform apply -var-file=input.tfvars -auto-approve
+                terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
