@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# if dev branch will run all relavent child scripts and check outputs
+# if dev branch will run all relevant child scripts and check outputs
 if [[ $GIT_BRANCH == "origin/testing_jenkins" ]]
 then
 
