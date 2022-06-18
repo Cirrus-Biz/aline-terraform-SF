@@ -14,7 +14,7 @@ then
 fi
 
 
-
+#something
 # checks all exit codes and if any failed will fail the stage of Jenkins pipeline
 if [[ $dev_networking == "failed" ]]
 then
