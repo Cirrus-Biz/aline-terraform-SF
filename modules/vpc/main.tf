@@ -31,7 +31,7 @@ resource "aws_subnet" "public" {
   vpc_id = aws_vpc.vpc.id
   for_each = var.public_subnet_numbers
   # adds specifiec number of bits to vpc cider | 4 bits on /16 would split subnets to /20 cidr
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_public, each.value)  
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.bits_for_subnet_cidr, each.value)  
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_public_subnet"
@@ -49,7 +49,7 @@ resource "aws_subnet" "private" {
   vpc_id = aws_vpc.vpc.id
   for_each = var.private_subnet_numbers
   # adds specifiec number of bits to vpc cider | 4 bits on /16 would split subnets to /20 cidr
-  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.subnet_bits_for_split_private, each.value)  # 4 would be 2,048 IP addresses each off /17
+  cidr_block = cidrsubnet(aws_vpc.vpc.cidr_block, var.bits_for_subnet_cidr, each.value)  # 4 would be 2,048 IP addresses each off /17
   availability_zone = each.key
   tags = {
     Name        = "${var.project_name}_${each.key}_${var.infra_env}_private_subnet"
@@ -95,7 +95,6 @@ resource "aws_nat_gateway" "nat_gateway" {
   }
 }
  
-# TODO Make Rout Dynamic Block
 # public route table (subnets with internet gateway)
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.vpc.id
@@ -117,8 +116,6 @@ resource "aws_route_table" "public" {
 # private route table (subnets with nat gateway)
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.vpc.id
-  route {
-  }
   tags = {
     Name        = "${var.project_name}_${var.infra_region}_${var.infra_env}_private_route_table"
     Environment = var.infra_env

@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+/**
+* jenkins pipeline that will
+* configures aws and exports profile for use
+* exports git branch that initialized webhook for parent terrafrom bash script to use
+* changes to parent script directory and runs parent bash script
+* that script parses the branch and will run relevant child scripts
+* if any child scripts fail, parent script will fail the stage
+*/
+
+pipeline {
+
+    agent {
+        node {
+            label 'dev-node'
+        }
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('SF_aws_access_key_id') 
+        AWS_SECRET_ACCESS_KEY = credentials('SF_aws_secret_access_key') 
+        AWS_REGION = credentials('SF_aws_region') 
+        AWS_OUTPUT = credentials('SF_aws_output') 
+        AWS_PROFILE = credentials('SF_aws_profile') 
+    }
+
+    stages {
+
+        stage('AWS Credentials and Login') {
+            steps {
+                sh 'aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID} --profile ${AWS_PROFILE}'
+                sh 'aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY} --profile ${AWS_PROFILE}'
+                sh 'aws configure set region ${AWS_REGION} --profile ${AWS_PROFILE}'
+                sh 'aws configure set output ${AWS_OUTPUT} --profile ${AWS_PROFILE}'
+                sh 'export AWS_PROFILE=${AWS_PROFILE}'
+            }
+        }
+
+        stage('Export Branch For Terraform Bash Script') {
+            steps {
+                sh 'export GIT_BRANCH=${GIT_BRANCH}'
+            }
+        }
+
+        stage('Run Terraform Parent Bash Script') {
+            steps {
+                dir("${WORKSPACE}/deployments/team_account") {
+                    sh './jenkins_run.sh'
+                }
+            }
+        }
+
+    }
+
+//    post {
+//        always {
+//           sh 'sudo docker logout'  // logs out of docker removing credentials
+//           sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+//           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+//           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+//        }
+//    }
+
+}

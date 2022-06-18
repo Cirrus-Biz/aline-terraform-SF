@@ -13,7 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  profile = "aline"
-  shared_config_files      = ["~/.aws/config"]
+  profile = "aline-sf"
+  shared_config_files = ["~/.aws/config"]
   shared_credentials_files = ["~/.aws/credentials"]
 }

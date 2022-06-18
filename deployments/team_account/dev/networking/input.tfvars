@@ -1,7 +1,7 @@
 # project variables
 infra_region = "us-east-1"
 infra_env = "dev"
-project_name = "aline-SF"
+project_name = "aline-sf"
 
 #vpc block
 vpc_cidr_block = "10.0.0.0/17"
@@ -25,9 +25,10 @@ private_subnet_numbers = {
                         "us-east-1f" = 12
                         }
 
+
+
 # subnet splits from vpc with /16 would give /20 subnets
-subnet_bits_for_split_public = "4"
-subnet_bits_for_split_private = "4"
+bits_for_subnet_cidr = "4"
 
 # public nacl egress
 nacl_public_egress = [

@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# date for logging
-DATE=$(date)
+# date and time for logging
+DATE=$('date +%A-+%D-+%T')
+
+# gets file path of this script
+FILE_PATH=$(dirname "$(realpath $0)")
 
 # set aws account to aline
-export AWS_PROFILE=aline
+# export AWS_PROFILE=aline-sf
 
 # init to correct state file
 terraform init -backend-config=backend.hcl
@@ -34,18 +37,18 @@ if [ -z "$error_check" ]
         # if all are 0 exports abort=true else apply and exports abort=false
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
-                export ABORT="true"
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                echo "ABORTED | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                echo "ABORTED | 0 added 0 changed 0 destroyed | $DATE"
             else
-                export ABORT="false"
-                echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
+                echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
+                echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE"
                 # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
     else
-        export ABORT="true"
         echo "ERROR IN PLAN ABORTED | $DATE" >> ./change_log.txt
+        echo "ERROR IN PLAN ABORTED | $DATE"
+        exit 1
 fi
 
-# Jenkins will use export value to continue or abort pipeline
