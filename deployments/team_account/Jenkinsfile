@@ -53,13 +53,13 @@ pipeline {
 
     }
 
-    # post {
-    #     always {
-    #        sh 'sudo docker logout'  // logs out of docker removing credentials
-    #        sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-    #        sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-    #        sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-    #     }
-    # }
+//    post {
+//        always {
+//           sh 'sudo docker logout'  // logs out of docker removing credentials
+//           sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+//           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+//           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+//        }
+//    }
 
 }
