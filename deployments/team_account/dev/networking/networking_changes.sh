@@ -34,32 +34,32 @@ if [ -z "$error_check" ]
         # if all are 0 exports abort=true else apply and exports abort=false
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
-                echo "0 added 0 changed 0 destroyed in $GIT_BRANCH `basename "$0"`| $DATE"
+                echo "0 added 0 changed 0 destroyed in $WORKSPACE $GIT_BRANCH `basename "$0"`| $DATE"
                 last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
                 aws logs put-log-events \
                     --log-group-name SF-Jenkins-Logs \
                     --log-stream-name Jenkins-Bash-Scripts \
-                    --log-events timestamp=$(date +%s%3N),message="0 added 0 changed 0 destroyed in $GIT_BRANCH `basename "$0"`| $DATE" \
+                    --log-events timestamp=$(date +%s%3N),message="0 added 0 changed 0 destroyed in $WORKSPACE $GIT_BRANCH `basename "$0"`| $DATE" \
                     --sequence-token $last_sequence_token
             else
-                echo "APPLIED PLAN IN: $GIT_BRANCH `basename "$0"` | $added added $changed changed $destroyed destroyed | $DATE"
+                echo "APPLIED PLAN IN: $WORKSPACE $GIT_BRANCH `basename "$0"` | $added added $changed changed $destroyed destroyed | $DATE"
                 last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
                 aws logs put-log-events \
                     --log-group-name SF-Jenkins-Logs \
                     --log-stream-name Jenkins-Bash-Scripts \
-                    --log-events timestamp=$(date +%s%3N),message="APPLIED PLAN IN: $GIT_BRANCH `basename "$0"` | $added added $changed changed $destroyed destroyed | $DATE" \
+                    --log-events timestamp=$(date +%s%3N),message="APPLIED PLAN IN: $WORKSPACE $GIT_BRANCH `basename "$0"` | $added added $changed changed $destroyed destroyed | $DATE" \
                     --sequence-token $last_sequence_token
                 # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
     # if errors exports abort=true
     else
-        echo "ERROR IN PLAN: $GIT_BRANCH `basename "$0"` | $DATE"
+        echo "ERROR IN PLAN: $WORKSPACE $GIT_BRANCH `basename "$0"` | $DATE"
         last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
         aws logs put-log-events \
             --log-group-name SF-Jenkins-Logs \
             --log-stream-name Jenkins-Bash-Scripts \
-            --log-events timestamp=$(date +%s%3N),message="ERROR IN PLAN: $GIT_BRANCH `basename "$0"` | $DATE" \
+            --log-events timestamp=$(date +%s%3N),message="ERROR IN PLAN: $WORKSPACE $GIT_BRANCH `basename "$0"` | $DATE" \
             --sequence-token $last_sequence_token
         exit 1
 fi

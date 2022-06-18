@@ -35,7 +35,7 @@ elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
 else
 
     # if no branch match logs to cloudwatch and aborts Jenkins stage
-    echo "ERROR NO BRANCH MATCH | In jenkins_run.sh Parent Bash Script For team_account: $GIT_BRANCH"
+    echo "ERROR NO BRANCH MATCH | Parent Bash Script For: $WORKSPACE $GIT_BRANCH `basename "$0"`"
     last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
         --log-group-name SF-Jenkins-Logs \
@@ -49,7 +49,7 @@ fi
 # checks if array has any "failed" entries | if so aborts Jenkins stage and sends cloudwatch log event
 if [[ ${#test[@]} -ne 0 ]]
 then
-    echo "ERROR IN CHILD SCRIPT | Error in jenkins_run.sh Child Bash Script For team_account"
+    echo "ERROR IN CHILD SCRIPT | Child Bash Script For: $GIT_BRANCH `basename "$0"`"
     last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
         --log-group-name SF-Jenkins-Logs \
