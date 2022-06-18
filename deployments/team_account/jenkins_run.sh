@@ -9,7 +9,7 @@ if [[ $GIT_BRANCH == "origin/dev" ]]; then
     then
         dev_networking="failed"
     fi
-elif [[ $GIT_BRANCH == "origin/_all_branch_webhook_test" ]]; then
+elif [[ $GIT_BRANCH == "origin/git_all_branch_webhook_test" ]]; then
 
     # dev networking state file
     cd  dev/networking && ./networking_changes.sh
