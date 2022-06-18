@@ -38,6 +38,7 @@ pipeline {
             steps {
                 dir("${WORKSPACE}/deployments/team_account") {
                     sh './jenkins_run.sh'
+                    # check to see if jenkins will abort from second script
                 }
             }
         }
