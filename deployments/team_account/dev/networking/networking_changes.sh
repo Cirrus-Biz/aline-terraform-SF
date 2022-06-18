@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # date and time for logging
-DATE=$('date +%A-+%D-+%T')
+DATE=$(date +"%A-%D-%T-%Z")
 
 # gets file path of this script
 FILE_PATH=$(dirname "$(realpath $0)")
