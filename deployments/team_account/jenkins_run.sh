@@ -9,6 +9,7 @@ if [[ $GIT_BRANCH == "origin/dev" ]]; then
     then
         dev_networking="failed"
     fi
+
 elif [[ $GIT_BRANCH == "origin/git_all_branch_webhook_test" ]]; then
 
     # dev networking state file
@@ -19,11 +20,12 @@ elif [[ $GIT_BRANCH == "origin/git_all_branch_webhook_test" ]]; then
     fi
 
 else
-    echo "NO BRANCH MATCH"
+
+    echo "NO BRANCH MATCH TO: $GIT_BRANCH"
     exit 1
+
 fi
 
-# test
 # checks all exit codes and if any failed will fail the stage of Jenkins pipeline
 if [[ $dev_networking == "failed" ]]
 then
