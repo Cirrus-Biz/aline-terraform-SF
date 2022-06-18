@@ -51,3 +51,6 @@ if [ -z "$error_check" ]
         echo "ERROR IN PLAN ABORTED | $DATE"
         exit 1
 fi
+
+echo 'Return Code:'
+echo $?
