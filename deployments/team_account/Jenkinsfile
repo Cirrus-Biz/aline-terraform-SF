@@ -38,14 +38,7 @@ pipeline {
             steps {
                 dir("${WORKSPACE}/deployments/team_account") {
                     sh './jenkins_run.sh'
-                    sh 'echo $?'
                 }
-            }
-        }
-
-        stage('Check Abort') {
-            steps {
-                sh 'echo ABORT Set To: $ABORT'
             }
         }
 
