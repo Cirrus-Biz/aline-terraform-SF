@@ -37,11 +37,11 @@ if [ -z "$error_check" ]
         # if all are 0 exports abort=true else apply and exports abort=false
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
+                echo "ABORTED | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
+                echo "ABORTED | 0 added 0 changed 0 destroyed | $DATE"
             else
-                echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
-                echo "applied plan | $added added $changed changed $destroyed destroyed | $DATE"
+                echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE" >> ./change_log.txt
+                echo "APPLIED PLAN | $added added $changed changed $destroyed destroyed | $DATE"
                 # terraform apply -var-file=input.tfvars -auto-approve
         fi
 
