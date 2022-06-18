@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-# date for logging
-DATE=$(date)
+# date and time for logging
+DATE=$('date +%A-+%D-+%T')
 
 # gets file path of this script
 FILE_PATH=$(dirname "$(realpath $0)")
 
 # set aws account to aline
-export AWS_PROFILE=aline-sf
+# export AWS_PROFILE=aline-sf
 
 # init to correct state file
 terraform init -backend-config=backend.hcl

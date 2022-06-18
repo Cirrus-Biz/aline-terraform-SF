@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+/*
+- jenkins pipeline that will
+- configures aws and exports profile for use
+- exports git branch that initialized webhook for parent terrafrom bash script to use
+- changes to parent script directory and runs parent bash script
+- that script parses the branch and will run relevant child scripts
+- if any child scripts fail, parent script will fail the stage
+*/
+
 pipeline {
 
     agent {
@@ -28,13 +37,13 @@ pipeline {
             }
         }
 
-        stage('Export Branch For Script') {
+        stage('Export Branch For Terraform Bash Script') {
             steps {
                 sh 'export GIT_BRANCH=${GIT_BRANCH}'
             }
         }
 
-        stage('Run Jenkins Script') {
+        stage('Run Terraform Parent Bash Script') {
             steps {
                 dir("${WORKSPACE}/deployments/team_account") {
                     sh './jenkins_run.sh'
@@ -52,5 +61,3 @@ pipeline {
 //           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
 //       }
 //   }
-
-}
