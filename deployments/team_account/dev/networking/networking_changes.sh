@@ -38,7 +38,7 @@ if [ -z "$error_check" ]
         if [[ $added == 0 ]] && [[ $changed == 0 ]] && [[ $destroyed == 0 ]]
             then
                 echo "aborted | 0 added 0 changed 0 destroyed | $DATE" >> ./change_log.txt
-                echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
+                # echo "aborted | 0 added 0 changed 0 destroyed | $DATE"
                 exit 1
                 # add cloudwatch logs
             else
