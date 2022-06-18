@@ -51,7 +51,7 @@ pipeline {
 
     }
 
-   #  post {
+   //  post {
    #      always {
    #         sh 'sudo docker logout'  // logs out of docker removing credentials
    #         sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
