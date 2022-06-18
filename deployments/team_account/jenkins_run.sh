@@ -4,12 +4,15 @@
 if [[ $GIT_BRANCH == "origin/testing_jenkins" ]]
     then
         cd  dev/networking && ./networking_changes.sh
-        if [ $? -ne 0 ]; then
-            exit 1
+        if [[ $? -ne 0 ]]; then
+            dev_networking=failed
         fi
-        echo "NEW SCRIPT WORKED"
     else
         echo "NO BRANCH HERE"
+fi
+
+if [[ $dev_networking == "failed" ]]
+    exit 1
 fi
 
 
