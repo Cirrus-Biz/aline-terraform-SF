@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage('Run Jenkins Script') {
+        stage('Check Abort') {
             steps {
                 sh 'echo ABORT Set To: $ABORT'
             }
