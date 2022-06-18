@@ -9,7 +9,7 @@ if [[ $GIT_BRANCH == "origin/testing_jenkins" ]]
         if [ $? -eq 0 ]; then
             echo "built"
         else
-            exit1
+            exit 1
         fi
 
         echo "NEW SCRIPT WORKED"
