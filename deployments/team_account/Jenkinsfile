@@ -44,7 +44,7 @@ pipeline {
 
         stage('Check Abort') {
             steps {
-                sh 'echo ABORT Set To: $ABORT'
+                sh 'echo ABORT Set To: ${ABORT}'
             }
         }
 
