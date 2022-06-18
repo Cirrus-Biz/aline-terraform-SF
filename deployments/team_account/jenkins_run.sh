@@ -22,7 +22,11 @@ elif [[ $GIT_BRANCH == "origin/dev" ]]; then
 
 else
 
-    echo "NO BRANCH MATCH TO: $GIT_BRANCH"
+    echo "ERROR NO BRANCH MATCH TO: $GIT_BRANCH"
+    aws logs put-log-events \
+        --log-group-name SF-Jenkins-Logs \
+        --log-stream-name Jenkins-Bash-Scripts \
+        --log-events timestamp=$(date +%s%3N),message="ERROR NO BRANCH MATCH TO: $GIT_BRANCH"
     exit 1
 
 fi
