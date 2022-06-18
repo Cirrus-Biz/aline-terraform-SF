@@ -23,10 +23,12 @@ elif [[ $GIT_BRANCH == "origin/dev" ]]; then
 else
 
     echo "ERROR NO BRANCH MATCH TO: $GIT_BRANCH"
+    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
         --log-group-name SF-Jenkins-Logs \
         --log-stream-name Jenkins-Bash-Scripts \
-        --log-events timestamp=$(date +%s%3N),message="ERROR NO BRANCH MATCH TO: $GIT_BRANCH"
+        --log-events timestamp=$(date +%s%3N),message="ERROR NO BRANCH MATCH TO: $GIT_BRANCH" \
+        --sequence-token $last_sequence_token
     exit 1
 
 fi
