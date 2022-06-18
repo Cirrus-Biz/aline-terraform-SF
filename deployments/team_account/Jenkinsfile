@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+/**
+* jenkins pipeline that will
+* configures aws and exports profile for use
+* exports git branch that initialized webhook for parent terrafrom bash script to use
+* changes to parent script directory and runs parent bash script
+* that script parses the branch and will run relevant child scripts
+* if any child scripts fail, parent script will fail the stage
+*/
 
 pipeline {
 
@@ -45,11 +53,11 @@ pipeline {
 
     }
 
-    # post {
-    #     always {
-    #        sh 'sudo docker logout'  // logs out of docker removing credentials
-    #        sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
-    #        sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
-    #        sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
-    #     }
-    # }
+    post {
+        always {
+           sh 'sudo docker logout'  // logs out of docker removing credentials
+           sh 'sudo rm -rf ~/.aws/'  // logs out of aws cli removing credentials
+           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/*'  // removes all files in job workspace
+           sh 'sudo rm -rf ~/jenkins/workspace/${JOB_NAME}/.git*'  // removes all .git files in job workspace
+        }
+    }
