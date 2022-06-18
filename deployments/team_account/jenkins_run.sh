@@ -23,14 +23,14 @@ elif [[ $GIT_BRANCH == "origin/dev" ]]; then
         dev_networking="failed"
     fi
 
-# elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
-#
-#     # dev networking state file
-#     cd  dev/networking && ./networking_changes.sh
-#     if [[ $? -ne 0 ]]
-#     then
-#         dev_networking="failed"
-#     fi
+elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
+
+    # dev networking state file
+    cd  dev/networking && ./networking_changes.sh
+    if [[ $? -ne 0 ]]
+    then
+        dev_networking="failed"
+    fi
 
 else
 
