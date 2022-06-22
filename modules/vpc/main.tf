@@ -1,3 +1,20 @@
+# create aws secrets to hold all base infrastructure key:value secrets
+resource "aws_secretsmanager_secret" "secret_create" {
+  name = var.secret_create
+}
+
+resource "aws_secretsmanager_secret_version" "secret_key_value" {
+  depends_on = [aws_secretsmanager_secret.secret_create]
+  secret_id = aws_secretsmanager_secret.secret_create.id
+  # secret_string = jsonencode(var.secrets)
+  secret_string = <<EOF
+   {
+    "sf_vpc_id": "${aws_vpc.vpc.id}"
+   }
+  EOF
+}
+
+
 # create vpc in region
 resource "aws_vpc" "vpc" {
   cidr_block       = var.vpc_cidr_block 

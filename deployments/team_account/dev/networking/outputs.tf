@@ -1,3 +1,7 @@
+output "secret_create" {
+  value = module.vpc.secret_create
+}
+
 output "vpc_id" {
   value = module.vpc.vpc_id
 }

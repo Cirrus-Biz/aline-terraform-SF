@@ -3,26 +3,30 @@ infra_region = "us-east-1"
 infra_env = "dev"
 project_name = "aline-sf"
 
+# secrets directory name
+secret_create = "SF_base_infrastructure"
+
 #vpc block
 vpc_cidr_block = "10.0.0.0/17"
 
 # specify AZ from region you would like to use
+# value number matters add/subtract from end
 public_subnet_numbers = {
                         "us-east-1a" = 1
                         "us-east-1b" = 2
-                        "us-east-1c" = 3
-                        "us-east-1d" = 4
-                        "us-east-1e" = 5
-                        "us-east-1f" = 6
+                        "us-east-1c" = 4
+                        # "us-east-1d" = 4
+                        # "us-east-1e" = 5
+                        # "us-east-1f" = 6
                         }
 
 private_subnet_numbers = {
-                        "us-east-1a" = 7
-                        "us-east-1b" = 8
-                        "us-east-1c" = 9
-                        "us-east-1d" = 10
-                        "us-east-1e" = 11
-                        "us-east-1f" = 12
+                        # "us-east-1a" = 7
+                        # "us-east-1b" = 8
+                        # "us-east-1c" = 9
+                        # "us-east-1d" = 10
+                        # "us-east-1e" = 11
+                        "us-east-1f" = 3
                         }
 
 
