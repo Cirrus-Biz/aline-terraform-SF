@@ -21,6 +21,12 @@ variable "project_name" {
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# secrets directory name
+variable "secret_create" {
+    type = string
+    description = "name of secrets directory to hold base infrastructure secrets"
+}
+
 
 # vpc cidr block
 variable "vpc_cidr_block" {

@@ -1,3 +1,7 @@
+output "secret_create" {
+  value = aws_secretsmanager_secret.secret_create.name
+}
+
 output "vpc_id" {
   value = aws_vpc.vpc.id
 }
