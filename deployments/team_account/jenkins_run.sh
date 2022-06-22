@@ -10,7 +10,7 @@ if [[ $GIT_BRANCH == "origin/main" ]]; then
     cd  dev/networking && ./networking_changes.sh
     if [[ $? -ne 0 ]]
     then
-        main_networking="failed"
+        failed_file_array+="origin/main networking failed"
     fi
 
 # if dev branch will run all relevant child scripts and check outputs
@@ -20,16 +20,7 @@ elif [[ $GIT_BRANCH == "origin/dev" ]]; then
     cd  dev/networking && ./networking_changes.sh
     if [[ $? -ne 0 ]]
     then
-        dev_networking="failed"
-    fi
-
-elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
-
-    # dev networking state file
-    cd  dev/networking && ./networking_changes.sh
-    if [[ $? -ne 0 ]]
-    then
-        dev_networking="failed"
+        failed_file_array+="origin/dev networking failed"
     fi
 
 else
@@ -47,14 +38,14 @@ else
 fi
 
 # checks if array has any "failed" entries | if so aborts Jenkins stage and sends cloudwatch log event
-if [[ ${#test[@]} -ne 0 ]]
+if [[ ${#failed_file_array[@]} -ne 0 ]]
 then
-    echo "ERROR IN CHILD SCRIPT | Child Bash Script For: $GIT_BRANCH `basename "$0"`"
+    echo "ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`"
     last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
         --log-group-name SF-Jenkins-Logs \
         --log-stream-name Jenkins-Bash-Scripts \
-        --log-events timestamp=$(date +%s%3N),message="ERROR IN CHILD SCRIPT | Error in jenkins_run.sh Child Bash Script For team_account" \
+        --log-events timestamp=$(date +%s%3N),message="ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`" \
         --sequence-token $last_sequence_token
     exit 1
 fi
