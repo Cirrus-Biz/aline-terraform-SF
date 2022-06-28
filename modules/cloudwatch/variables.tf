@@ -34,3 +34,43 @@ variable "log_streams" {
   #   "log_stream_name" = "log_stream_group"
   # }
 }
+
+variable "create_metric_filters" {
+    type = map(object({
+        name = string
+        pattern = string
+        log_group_name = string
+        metric_name = string
+        metric_value = string
+        metric_unit = string
+    }))
+    description = "map of objects creating metric filters"
+}
+
+variable "create_metric_alarms" {
+    type = map(object({
+      namespace                 = string
+      alarm_name                = string
+      metric_name               = string
+      statistic                 = string
+      period                    = string
+      comparison_operator       = string
+      evaluation_periods        = string
+      threshold                 = string
+      alarm_description         = string
+    }))
+    description = "map of objects creating metric alarms"
+}
+
+variable "create_sns_topics" {
+  type = list(string)
+  description = "list of created sns topics"
+}
+
+variable "create_topic_subscriptions" {
+    type = map(object({
+      topic_arn = string
+      endpoint  = string
+    }))
+    description = "map of objects creating topic subscriptions"
+}
