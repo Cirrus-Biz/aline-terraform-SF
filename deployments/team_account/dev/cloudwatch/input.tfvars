@@ -41,7 +41,7 @@ create_metric_alarms = {
     evaluation_periods  = "1"
     threshold           = "1"
     alarm_description   = "Alerts Alarm On Any Log With ERROR And Sends To SNS Topic"
-    actions_enabled     = "false"
+    actions_enabled     = "true"
     alarm_actions       = ["arn:aws:sns:us-east-1:744758641322:SF_Terraform_Pipeline_Dev_ERROR"]
   }
 }
