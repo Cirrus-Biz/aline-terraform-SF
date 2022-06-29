@@ -46,6 +46,8 @@ else
 
 fi
 
+echo ${#failed_file_array[@]}
+echo $failed_file_array
 # checks if array has any "failed" entries | if so aborts Jenkins stage and sends cloudwatch log event
 if [[ ${#failed_file_array[@]} -ne 0 ]]
 then
