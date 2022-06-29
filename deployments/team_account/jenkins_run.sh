@@ -23,6 +23,15 @@ elif [[ $GIT_BRANCH == "origin/dev" ]]; then
         failed_file_array+="origin/dev networking failed"
     fi
 
+elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
+
+    # dev networking state file
+    cd  dev/networking && ./networking_changes.sh
+    if [[ $? -ne 0 ]]
+    then
+        failed_file_array+="origin/dev networking failed"
+    fi
+
 else
 
     # if no branch match logs to cloudwatch and aborts Jenkins stage
