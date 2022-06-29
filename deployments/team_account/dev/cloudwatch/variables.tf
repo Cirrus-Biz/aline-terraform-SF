@@ -22,7 +22,7 @@ variable "project_name" {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 variable "log_groups" {
-  type = list(string)
+  type = map(string)
   description = "list of log group names"
 }
 
@@ -41,6 +41,7 @@ variable "create_metric_filters" {
         pattern = string
         log_group_name = string
         metric_name = string
+        metric_namespace = string
         metric_value = string
         metric_unit = string
     }))
@@ -58,8 +59,10 @@ variable "create_metric_alarms" {
       evaluation_periods        = string
       threshold                 = string
       alarm_description         = string
+      actions_enabled = string
+      alarm_actions   = list(string)
     }))
-    description = "map of objects creating metric alarms"
+    description = "map of objects creating metric alarms with sns notifications"
 }
 
 variable "create_sns_topics" {
