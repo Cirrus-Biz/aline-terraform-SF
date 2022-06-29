@@ -23,6 +23,7 @@ resource "aws_cloudwatch_log_stream" "create_log_stream" {
 
 # creates cloud watch metric filter and assigns to group
 resource "aws_cloudwatch_log_metric_filter" "create_metric_filter" {
+  depends_on     = [aws_cloudwatch_log_group.create_log_group]
   for_each       = var.create_metric_filters
   name           = each.value.name
   pattern        = each.value.pattern
@@ -39,6 +40,7 @@ resource "aws_cloudwatch_log_metric_filter" "create_metric_filter" {
 
 # creates metric alarm with sns notifications
 resource "aws_cloudwatch_metric_alarm" "create_metric_alarm" {
+  depends_on     = [aws_cloudwatch_log_metric_filter.create_metric_filter, aws_sns_topic.create_sns_topic]
   for_each            = var.create_metric_alarms
   namespace           = each.value.namespace
   alarm_name          = each.value.alarm_name

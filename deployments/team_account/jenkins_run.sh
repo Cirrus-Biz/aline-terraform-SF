@@ -27,10 +27,10 @@ else
 
     # if no branch match logs to cloudwatch and aborts Jenkins stage
     echo "ERROR NO BRANCH MATCH | Parent Bash Script For: $WORKSPACE $GIT_BRANCH `basename "$0"`"
-    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
+    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
-        --log-group-name SF-Jenkins-Logs \
-        --log-stream-name Jenkins-Bash-Scripts \
+        --log-group-name SF_Terraform_Pipeline_Dev_Logs \
+        --log-stream-name SF_Terraform_Pipeline_ERROR \
         --log-events timestamp=$(date +%s%3N),message="ERROR NO BRANCH MATCH | In jenkins_run.sh Parent Bash Script For team_account: $GIT_BRANCH" \
         --sequence-token $last_sequence_token
     exit 1
@@ -41,10 +41,10 @@ fi
 if [[ ${#failed_file_array[@]} -ne 0 ]]
 then
     echo "ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`"
-    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF-Jenkins-Logs --query 'logStreams[?logStreamName ==`'Jenkins-Bash-Scripts'`].[uploadSequenceToken]' --output text)
+    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
     aws logs put-log-events \
-        --log-group-name SF-Jenkins-Logs \
-        --log-stream-name Jenkins-Bash-Scripts \
+        --log-group-name SF_Terraform_Pipeline_Dev_Logs \
+        --log-stream-name SF_Terraform_Pipeline_ERROR \
         --log-events timestamp=$(date +%s%3N),message="ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`" \
         --sequence-token $last_sequence_token
     exit 1
