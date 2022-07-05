@@ -4,7 +4,7 @@ infra_env    = "dev"
 project_name = "aline-sf"
 
 # secrets directory name
-secret_create = "SF_base_infrastructure"
+secret_create = "SF_Base_Infrastructure_Dev"
 
 #vpc block
 vpc_cidr_block = "10.0.0.0/17"

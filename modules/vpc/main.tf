@@ -9,7 +9,7 @@ resource "aws_secretsmanager_secret_version" "secret_key_value" {
   # secret_string = jsonencode(var.secrets)
   secret_string = <<EOF
    {
-    "sf_vpc_id": "${aws_vpc.vpc.id}"
+    "sf_base_infrastructure_dev_vpc_id": "${aws_vpc.vpc.id}"
    }
   EOF
 }
