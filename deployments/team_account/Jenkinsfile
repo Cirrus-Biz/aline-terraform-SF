@@ -40,7 +40,7 @@ pipeline {
         stage('Export Branch & Workspace For Terraform Bash Script') {
             steps {
                 sh 'export GIT_BRANCH=${GIT_BRANCH}'
-                sh 'export WORKSPACE=${JOB_NAME}'
+                sh 'export JOB_NAME=${JOB_NAME}'
             }
         }
 
