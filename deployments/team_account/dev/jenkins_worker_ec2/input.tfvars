@@ -1,15 +1,10 @@
 ec2_vars  = {
   ec2_1 = {
-    # instance_type = "t2.micro"
-    instance_type = "T00.micro"
-    tag_name = "Jenkins_Worker_10_SF-1"
+    instance_type = "t3.medium"
+    tag_name = "Jenkins-Worker-SF"
     tag_ansible = "Jenkins-Worker-SF"
+    subnet_id = "subnet-09465c4cc7ae87791"
+    vpc_security_group_ids = ["sg-0dfc4a6e9f9aea008"] 
+    key_name = "TeamJenkins"
   }
-  # ec2_2 = {
-  #   instance_type = "t2.micro"
-  #   tag_name = "Swift-Worker-SF"
-  #   tag_ansible = "Swift-Worker-SF"
-  # }
 }
-
-instance_type_test = "T33.micro"

@@ -6,10 +6,10 @@ resource "aws_secretsmanager_secret" "secret_create" {
 resource "aws_secretsmanager_secret_version" "secret_key_value" {
   depends_on = [aws_secretsmanager_secret.secret_create]
   secret_id  = aws_secretsmanager_secret.secret_create.id
-  # secret_string = jsonencode(var.secrets)
+  for_each = var.secrets_vars
   secret_string = <<EOF
    {
-    "sf_base_infrastructure_dev_vpc_id": "${aws_vpc.vpc.id}"
+    "${var.project_name}_${var.infra_env}_vpc_id": "${aws_vpc.vpc.id}"
    }
   EOF
 }
