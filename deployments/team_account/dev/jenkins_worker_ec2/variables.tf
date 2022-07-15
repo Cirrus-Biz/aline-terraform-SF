@@ -12,3 +12,10 @@ variable "ec2_vars" {
   }))
   description = "ec2_variables"
 }
+
+
+variable "instance_type_test" {
+    type = string
+    description = "test"
+}
+

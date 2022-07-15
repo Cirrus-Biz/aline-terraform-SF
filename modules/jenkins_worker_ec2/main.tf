@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "jenkins_workers" {
   for_each = var.ec2_vars
   ami           = data.aws_ami.ubuntu.id
-  instance_type = each.value.instance_type
+  instance_type =  var.ec2_vars.each.value.instance_type # each.value.instance_type
   subnet_id = "subnet-09465c4cc7ae87791"
   vpc_security_group_ids = ["sg-0dfc4a6e9f9aea008"]
   associate_public_ip_address = true
