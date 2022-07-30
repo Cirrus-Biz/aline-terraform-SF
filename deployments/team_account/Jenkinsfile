@@ -44,7 +44,15 @@ pipeline {
             }
         }
 
-        stage('Run Terraform Parent Bash Script') {
+        stage('Run TFLint Bash Script On All Deployments For Branch') {
+            steps {
+                dir('./deployments/team_account') {
+                    sh './jenkins_run.sh'
+                }
+            }
+        }
+
+        stage('Run Terraform Parent Bash Script For Branch') {
             steps {
                 dir('./deployments/team_account') {
                     sh './jenkins_run.sh'
