@@ -29,10 +29,6 @@ variable "log_groups" {
 variable "log_streams" {
   type        = map(string)
   description = "log stream name for key | log stream group for value"
-  # example
-  # log_streams = {
-  #   "log_stream_name" = "log_stream_group"
-  # }
 }
 
 variable "create_metric_filters" {
