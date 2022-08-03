@@ -1,62 +1,103 @@
 #!/usr/bin/env bash
 
-# array to query at end for any failures in child scripts
-failed_file_array=()
+# script is run by jenkins
+# checks to make sure jenkins exported the git branch that initialized the webhook
+# then builds an array of valid directory branch names in repo
+# checks if the exported branch matches any directory name
+# if it does cd's into that directory and runs terraform_changes.sh child script in all deployment directories in that branch
+# finally it will check for any logged errors to failed_parent_array
+# if any failure logs to console, sends to cloudwatch logs, and exits with 1 to abort jenkins stage
 
-# TODO make loop that checks for branch in subdirectories and fails and logs if not there
+export GIT_BRANCH="origin/dev"
 
-# if main branch will run all relevant child scripts and check outputs
-if [[ $GIT_BRANCH == "origin/main" ]]; then
+# array to query at end for any failures in this parent script
+failed_parent_array=()
 
-    # dev networking state file
-    cd  dev/networking && ./networking_changes.sh
-    if [[ $? -ne 0 ]]
-    then
-        failed_file_array+="origin/main networking failed"
-    fi
+# array to query at end for any failers in child scripts ran by this parent script
+failed_child_array=()
 
-# if dev branch will run all relevant child scripts and check outputs
-elif [[ $GIT_BRANCH == "origin/dev" ]]; then
-
-    # dev networking state file
-    cd  dev/networking && ./networking_changes.sh
-    if [[ $? -ne 0 ]]
-    then
-        failed_file_array+="origin/dev networking failed"
-    fi
-
-elif [[ $GIT_BRANCH == "origin/cloudwatch" ]]; then
-
-    # dev networking state file
-    cd  dev/networking && ./networking_changes.sh
-    if [[ $? -ne 0 ]]
-    then
-        failed_file_array+="origin/dev networking failed"
-    fi
-
+# check if branch exported by jenkins is empty
+if [[ -z "$GIT_BRANCH" ]]
+then
+    failed_parent_array+="\$GIT_BRANCH NOT EXPORTED "
+    GIT_BRANCH="BRANCH NOT EXPORTED"
 else
 
-    # if no branch match logs to cloudwatch and aborts Jenkins stage
-    echo "ERROR NO BRANCH MATCH | Parent Bash Script For: $WORKSPACE $GIT_BRANCH `basename "$0"`"
-    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
-    aws logs put-log-events \
-        --log-group-name SF_Terraform_Pipeline_Dev_Logs \
-        --log-stream-name SF_Terraform_Pipeline_ERROR \
-        --log-events timestamp=$(date +%s%3N),message="ERROR NO BRANCH MATCH | In jenkins_run.sh Parent Bash Script For team_account: $GIT_BRANCH" \
-        --sequence-token $last_sequence_token
-    exit 1
+    # loop over every subdirectory branch deployment names to build branch_subdirectories array
+    branch_subdirectories=()
+    for branch_dir in */
+    do
+        # check if branch_dir is directory
+        if [[ -d "$branch_dir" ]]
+        then
+            branch_name=${branch_dir::-1}  # removes "/" at the end of branch_dir
+            branch_subdirectories+=($branch_name)
+        fi
+    done
+
+    # sets boolean branch_exists to true if directory maching GIT_BRANCH exists
+    branch_exists=false
+    for branch in "${branch_subdirectories[@]}"
+    do
+        if [[ "origin/$branch" == $GIT_BRANCH ]]
+        then
+            branch_exists=true
+            branch_subdir=$branch
+            break
+        else
+            continue
+        fi
+    done
+
+    if [[ $branch_exists == false ]]
+    then
+        failed_parent_array+="\$GIT_BRANCH DOES NOT MATCH A BRANCH DIRECTORY "
+    else
+
+        # cd into exported branch directory
+        cd $branch_subdir
+
+        # loop over every directory in branch deployment
+        for deployment_in_branch in */
+        do
+            # check if deployment_in_branch is directory
+            if [[ -d "$deployment_in_branch" ]]
+            then
+                cd $deployment_in_branch
+                ./terraform_init_apply.sh
+                if [[ $? -ne 0 ]]
+                then
+                    failed_child_array+="$deployment_in_branch "
+                fi
+                cd ..
+            fi
+        done
+    fi
 
 fi
 
-# checks if array has any "failed" entries | if so aborts Jenkins stage and sends cloudwatch log event
-if [[ ${#failed_file_array[@]} -ne 0 ]]
+# checks if parent script(this script) array has any "failed" entries | if so aborts jenkins stage and sends cloudwatch log event
+if [[ ${#failed_parent_array[@]} -ne 0 ]]
 then
-    echo "ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`"
-    last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
-    aws logs put-log-events \
-        --log-group-name SF_Terraform_Pipeline_Dev_Logs \
-        --log-stream-name SF_Terraform_Pipeline_ERROR \
-        --log-events timestamp=$(date +%s%3N),message="ERROR IN CHILD SCRIPT | Child Bash Script For: ${failed_file_array[@]} $GIT_BRANCH `basename "$0"`" \
-        --sequence-token $last_sequence_token
+    echo "ERROR IN PARENT SCRIPT | Script Failed For Branch: $GIT_BRANCH | In Directories: ${failed_parent_array[@]}| File: `basename "$0"`"
+    # last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
+    # aws logs put-log-events \
+    #     --log-group-name SF_Terraform_Pipeline_Dev_Logs \
+    #     --log-stream-name SF_Terraform_Pipeline_ERROR \
+    #     --log-events timestamp=$(date +%s%3N),message="ERROR IN PARENT SCRIPT | Script Failed For Branch: $GIT_BRANCH | In Directories: ${failed_parent_array[@]}| File: `basename "$0"`" \
+    #     --sequence-token $last_sequence_token
+    exit 1
+fi
+
+# checks if child script array has any "failed" entries | if so aborts jenkins stage and sends cloudwatch log event
+if [[ ${#failed_child_array[@]} -ne 0 ]]
+then
+    echo "ERROR IN CHILD SCRIPT | Script Failed For Branch: $GIT_BRANCH | In Directories: ${failed_child_array[@]}| File: `basename "$0"`"
+    # last_sequence_token=$(aws logs describe-log-streams --log-group-name SF_Terraform_Pipeline_Dev_Logs --query 'logStreams[?logStreamName ==`'SF_Terraform_Pipeline_ERROR'`].[uploadSequenceToken]' --output text)
+    # aws logs put-log-events \
+    #     --log-group-name SF_Terraform_Pipeline_Dev_Logs \
+    #     --log-stream-name SF_Terraform_Pipeline_ERROR \
+    #     --log-events timestamp=$(date +%s%3N),message="ERROR IN CHILD SCRIPT | Script Failed For Branch: $GIT_BRANCH | In Directories: ${failed_parent_array[@]}| File: `basename "$0"`" \
+    #     --sequence-token $last_sequence_token
     exit 1
 fi
