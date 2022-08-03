@@ -2,8 +2,9 @@
 
 # configures aws and exports profile for use
 # exports git branch that initialized webhook for bash scripts to use
-# changes to parent script directory and runs parent bash script
-# that script parses the branch and will run relevant child scripts
+# runs terratest on modules to confirm they are in working order
+# lints each deployment in that branch with rules from provider and in .tflint.hcl
+# runs parent bash script that parses the branch and will run relevant child deployment scripts
 # if any child scripts fail, parent script will fail the stage
 
 
