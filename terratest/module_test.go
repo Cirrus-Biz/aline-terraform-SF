@@ -47,7 +47,7 @@ func TestJenkinsWorkerModule(t *testing.T) {
     terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 
         // the path to where the module code is located
-        TerraformDir: "../jenkins_worker_ec2",
+        TerraformDir: "../modules/terraform-aws-jenkins_worker",
 
         Vars: map[string]interface{}{
             "ec2_vars": ec2_vars,

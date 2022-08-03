@@ -3,6 +3,8 @@
 # array to query at end for any failures in child scripts
 failed_file_array=()
 
+# TODO make loop that checks for branch in subdirectories and fails and logs if not there
+
 # if main branch will run all relevant child scripts and check outputs
 if [[ $GIT_BRANCH == "origin/main" ]]; then
 
@@ -46,8 +48,6 @@ else
 
 fi
 
-echo ${#failed_file_array[@]}
-echo $failed_file_array
 # checks if array has any "failed" entries | if so aborts Jenkins stage and sends cloudwatch log event
 if [[ ${#failed_file_array[@]} -ne 0 ]]
 then

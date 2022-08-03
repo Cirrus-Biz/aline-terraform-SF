@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
-/**
-* # jenkins pipeline that will
-* # configures aws and exports profile for use
-* # exports git branch that initialized webhook for parent terrafrom bash script to use
-* # changes to parent script directory and runs parent bash script
-* # that script parses the branch and will run relevant child scripts
-* # if any child scripts fail, parent script will fail the stage
-*/
+# configures aws and exports profile for use
+# exports git branch that initialized webhook for bash scripts to use
+# changes to parent script directory and runs parent bash script
+# that script parses the branch and will run relevant child scripts
+# if any child scripts fail, parent script will fail the stage
+
 
 pipeline {
 
+    # specify worker nodes by label
     agent {
         node {
             label 'dev-node'
         }
     }
 
+    # credentials
     environment {
         AWS_ACCESS_KEY_ID = credentials('SF_aws_access_key_id') 
         AWS_SECRET_ACCESS_KEY = credentials('SF_aws_secret_access_key') 
@@ -37,25 +37,34 @@ pipeline {
             }
         }
 
-        stage('Export Branch & Workspace For Terraform Bash Script') {
+        # used in bash scripts and logging
+        stage('Export Branch & Job Name For Bash Scripts') {
             steps {
                 sh 'export GIT_BRANCH=${GIT_BRANCH}'
                 sh 'export JOB_NAME=${JOB_NAME}'
             }
         }
 
-        stage('Run TFLint Bash Script On All Deployments For Branch') {
+        stage('Run Terratest On Modules') {
             steps {
-                dir('./deployments/team_account') {
-                    sh './jenkins_run.sh'
+                dir('./terratest') {
+                    sh 'go test -v -timeout 30m'
                 }
             }
         }
 
-        stage('Run Terraform Parent Bash Script For Branch') {
+        stage('Run TFLint On All Deployments In Branch') {
             steps {
                 dir('./deployments/team_account') {
-                    sh './jenkins_run.sh'
+                    sh './tflint_run.sh'
+                }
+            }
+        }
+
+        stage('Run Terraform On All Deployments In Branch') {
+            steps {
+                dir('./deployments/team_account') {
+                    sh './terraform_run.sh'
                 }
             }
         }
