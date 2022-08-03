@@ -7,5 +7,5 @@ variable "ec2_vars" {
     vpc_security_group_ids = list(string)
     key_name = string
   }))
-  description = "ec2_variables"
+  description = "map of ec2 instance variables | can have multiple nested maps"
 }

@@ -1,16 +1,16 @@
 output "log_groups" {
-  value = module.terraform-aws-cloudwatch.log_groups
+  value = module.cloudwatch.log_groups
+  description = "log groups output"
+  
 }
 
 # returns map of streams and their log group
 output "log_streams" {
-  value = module.terraform-aws-cloudwatch.log_streams
+  value = module.cloudwatch.log_streams
+  description = "log streams output"
 }
 
-# output "create_metric_filter" {
-#   value = module.terraform-aws-cloudwatch.create_metric_filter
-# }
-
 output "sns_topics" {
-  value = module.terraform-aws-cloudwatch.sns_topics
+  value = module.cloudwatch.sns_topics
+  description = "sns topics output"
 }
