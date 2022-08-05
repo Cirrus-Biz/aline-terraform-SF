@@ -46,18 +46,18 @@ pipeline {
             }
         }
 
-        stage('Run Terratest On Modules') {
-            steps {
-                dir('./terratest') {
-                    sh 'go test -v -timeout 30m'
-                }
-            }
-        }
-
         stage('Run TFLint On All Deployments In Branch') {
             steps {
                 dir('./deployments/team_account') {
                     sh './tflint_run.sh'
+                }
+            }
+        }
+
+        stage('Run Terratest On Modules') {
+            steps {
+                dir('./terratest') {
+                    sh 'go test -v -timeout 30m'
                 }
             }
         }

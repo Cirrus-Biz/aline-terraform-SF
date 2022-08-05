@@ -9,7 +9,10 @@ import (
     "github.com/stretchr/testify/assert"
 )
 
-func TestJenkinsWorkerModule(t *testing.T) {
+func TestJenkinsWorkerModuleOld(t *testing.T) {
+
+    // create unique id for tagging
+    uniqueId := random.UniqueId()
 
     // pick a random aws region to test in
 	awsRegion := aws.GetRandomStableRegion(t, []string{"us-east-1"}, nil)
@@ -18,8 +21,8 @@ func TestJenkinsWorkerModule(t *testing.T) {
 	instanceType := aws.GetRecommendedInstanceType(t, awsRegion, []string{"t2.micro", "t3.micro"})
 
     // instance names
-    instance1 := fmt.Sprintf("sf-terratest-jenkins-worker-%s", random.UniqueId())
-    instance2 := fmt.Sprintf("sf-terratest-jenkins-worker-%s", random.UniqueId())
+    instance1 := fmt.Sprintf("sf-terratest-jenkins-worker-%s", uniqueId)
+    instance2 := fmt.Sprintf("sf-terratest-jenkins-worker-%s", uniqueId)
 
     // input map of test ec2 jenkins worker nodes
     ec2_vars := map[string]map[string]interface{}{
