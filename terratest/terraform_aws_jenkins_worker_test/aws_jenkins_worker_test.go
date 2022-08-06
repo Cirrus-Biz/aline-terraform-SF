@@ -1,4 +1,4 @@
-package test
+package terraform_aws_jenkins_worker_test
 
 import (
     "fmt"
@@ -23,7 +23,7 @@ func TestJenkinsWorkerModule(t *testing.T) {
     awsProfile := "aline-sf"
 
     // the directory we have our terraform module code
-	workingDir := "../modules/terraform-aws-jenkins_worker"
+	workingDir := "../../modules/terraform-aws-jenkins_worker"
 
     // pick a random aws region to test in
     awsRegion := aws.GetRandomStableRegion(t, []string{"us-east-1"}, nil)
@@ -70,7 +70,7 @@ func TestJenkinsWorkerModule(t *testing.T) {
 
 // terraform destroy
 func destroyTerraform(t *testing.T, workingDir string) {
-	// load the terraform options saved by the earlier deploy_terraform stage
+	// load the terraform options saved by the earlier deploy stage
 	terraformOptions := test_structure.LoadTerraformOptions(t, "./")
 	terraform.Destroy(t, terraformOptions)
 }
