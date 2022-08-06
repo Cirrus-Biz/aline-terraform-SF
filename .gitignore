@@ -1,0 +1,7 @@
+**/.DS_Store
+**/.terraform
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/.test-data
+**/go.mod
+**/go.sum

@@ -1,4 +1,3 @@
-
 # creates cloudwatch log group
 resource "aws_cloudwatch_log_group" "create_log_group" {
   for_each          = var.log_groups

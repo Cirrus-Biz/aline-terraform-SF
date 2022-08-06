@@ -1,15 +1,15 @@
 # create aws secrets to hold all base infrastructure key:value secrets
 resource "aws_secretsmanager_secret" "secret_create" {
   name = var.secret_create
+  description = "${var.project_name}_${var.infra_env} Base infrastructure Secrets"
 }
 
 resource "aws_secretsmanager_secret_version" "secret_key_value" {
   depends_on = [aws_secretsmanager_secret.secret_create]
   secret_id  = aws_secretsmanager_secret.secret_create.id
-  # secret_string = jsonencode(var.secrets)
   secret_string = <<EOF
    {
-    "sf_base_infrastructure_dev_vpc_id": "${aws_vpc.vpc.id}"
+    "${var.project_name}_${var.infra_env}_vpc_id": "${aws_vpc.vpc.id}"
    }
   EOF
 }

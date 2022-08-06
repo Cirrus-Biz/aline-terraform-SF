@@ -1,5 +1,5 @@
 module "cloudwatch" {
-    source = "../../../../modules/cloudwatch"
+    source = "../../../../modules/terraform-aws-cloudwatch"
     infra_region = var.infra_region
     infra_env = var.infra_env
     project_name = var.project_name
